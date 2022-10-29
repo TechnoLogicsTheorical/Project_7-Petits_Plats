@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport"
+		      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		
+		<!--	StyleSheets & Google Fonts	-->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Roboto:wght@700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="assets/css/style.css">
+		
+		<title>Les petits plats</title>
+	</head>
+	<body>
+		<header id="MAIN_HEADER">
+			<h1>
+				<img src="assets/img/logo.png" alt="Logo: Les petits plats"/>
+			</h1>
+		</header>
+	
+		<main>
+			<section>
+				<form role="search" id="RECIPES_BAR">
+					<input type="search"
+					       name="recipesQuery"
+					       id="recipesSearch"
+					       class="btn"
+					       placeholder="Recherche une recette"
+					       autocomplete="off"
+					>
+					<button
+						type="submit"
+						class="icon"
+					>
+						<img src="assets/img/icons/search.svg" alt="Lancer la recherche"/>
+					</button>
+				</form>
+
+				<div id="ACTIVE_FILTERS" aria-hidden="true">
+					<!-- 	Activate container with a js and adding manualy addictive search    -->
+				</div>
+
+				<div id="EXTRAS_BUTTONS">
+
+					<form role="search" id="ingredientsSearch">
+						<div class="btn-wrapper">
+							<span class="arrow-icon"></span>
+							<input
+									type="search"
+									name="ingredientsQuery"
+									class="btn"
+									placeholder="Ingrédients"
+									autocomplete="off"
+							>
+						</div>
+						<ul id="ingredientsList" class="listContainer" aria-hidden="true">
+							<!--    Dynamic Generated in JS option value    -->
+						</ul>
+					</form>
+
+					<form role="search" id="equipmentsSearch">
+						<div class="btn-wrapper">
+							<span class="arrow-icon"></span>
+							<input
+									type="search"
+									name="equipmentsQuery"
+									class="btn"
+									placeholder="Appareils"
+									autocomplete="off"
+							>
+						</div>
+						<ul id="equipmentsList" class="listContainer" aria-hidden="true">
+							<!--    Dynamic Generated in JS option value    -->
+						</ul>
+					</form>
+
+					<form role="search" id="ustensilsSearch">
+						<div class="btn-wrapper">
+							<span class="arrow-icon"></span>
+							<input
+									type="search"
+									name="ustensilsQuery"
+									class="btn"
+									placeholder="Ustensiles"
+									autocomplete="off"
+							>
+						</div>
+						<ul id="ustensilsList" class="listContainer" aria-hidden="true">
+							<!--    Dynamic Generated in JS option value    -->
+						</ul>
+					</form>
+
+				</div>
+			</section>
+			
+			<!--    Conteneur des recettes trouvées     -->
+			<section id="RECIPES">
+
+			</section>
+			
+		</main>
+
+		<script type="module" src="assets/js/pages/index.js"></script>
+	</body>
+</html>

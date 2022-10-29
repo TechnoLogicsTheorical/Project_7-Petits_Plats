@@ -1,0 +1,21 @@
+#RECIPES_BAR {
+  position: relative;
+  .btn {
+    width: 100%;
+    padding: 24px;
+    font-size: inherit;
+    background: #E7E7E7;
+  }
+  .icon {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    appearance: none;
+
+    cursor: pointer;
+
+    position: absolute;
+    top: calc(50% - 22px);
+    right: 10px;
+  }
+}

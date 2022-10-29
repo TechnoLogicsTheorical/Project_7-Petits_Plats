@@ -1,0 +1,10 @@
+// Permet de supprimer le button de suppression de la recherche en cours
+input::-webkit-search-cancel-button {
+  display: none;
+}
+
+// Permet de supprimer les fléches existantes sur les inputs
+input::-webkit-calendar-picker-indicator {
+  display: none;
+  opacity: 0;
+}

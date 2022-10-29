@@ -1,0 +1,30 @@
+.filter-element {
+  display: inline-flex;
+  align-items: center;
+
+  color: white;
+  font-size: 14px;
+  padding: 10px 20px;
+  border-radius: 5px;
+
+  button {
+    border: none;
+    appearance: none;
+    background: transparent;
+
+    cursor:pointer;
+    margin-left: 11px;
+  }
+}
+
+.filter-element{
+  &.ingredient {
+    background: var(--blue-color);
+  }
+  &.equipment {
+    background: var(--green-color);
+  }
+  &.utensil {
+    background: var(--orange-color);
+  }
+}

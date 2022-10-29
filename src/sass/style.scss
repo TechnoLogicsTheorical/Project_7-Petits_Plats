@@ -1,0 +1,25 @@
+/*
+  ---------------------------------
+  [           Basics              ]
+  ---------------------------------
+*/
+@import "utils/variables";
+@import "base/style";
+@import "layouts/header";
+
+/*
+  ---------------------------------
+  [           Components          ]
+  ---------------------------------
+*/
+@import "components/button";
+@import "layouts/search-bar";
+
+@import "components/filter-element";
+@import "layouts/active-filters";
+
+@import "components/dropdown-btn";
+@import "layouts/extras-buttons";
+
+@import "components/recipe-card";
+@import "layouts/recipes-wrapper";

@@ -1,0 +1,6 @@
+#ACTIVE_FILTERS {
+  margin-top: 25px;
+  &[aria-hidden='true'] {
+    display: none;
+  }
+}

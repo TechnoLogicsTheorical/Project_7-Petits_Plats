@@ -1,0 +1,12 @@
+@charset "UTF-8";
+input::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Permet de supprimer les fléches existantes sur les inputs */
+input::-webkit-calendar-picker-indicator {
+  display: none;
+  opacity: 0;
+}
+
+/*# sourceMappingURL=reset-inputs.css.map */
