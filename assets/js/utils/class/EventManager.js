@@ -17,10 +17,27 @@ function attachInputSearchBar() {
     });
 }
 
+function attachDropdownArrowIconClicked() {
+    Elements.allDropdownButtons.forEach( button => {
+        button.addEventListener('click', (e)=> {
+            const clickedListElement = event.target.offsetParent.nextElementSibling;
+            let boolStringNotVisible = clickedListElement.ariaHidden;
+
+            if (boolStringNotVisible === 'true') {
+                clickedListElement.ariaHidden = 'false';
+            }
+            else if (boolStringNotVisible === 'false') {
+                clickedListElement.ariaHidden = 'true';
+            }
+        });
+    });
+}
+
 export class EventManager {
 
     static init() {
        preventDefaultForms();
        attachInputSearchBar();
+       attachDropdownArrowIconClicked();
     }
 }

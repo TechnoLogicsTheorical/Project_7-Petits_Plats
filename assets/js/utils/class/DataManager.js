@@ -47,8 +47,6 @@ export class Data {
         return recipes;
     }
 
-
-
     static submitedDataInputSearchBarValue(dataInputValue) {
         const typedUserSearch = dataInputValue.toLowerCase();
         // Procéder à la recherche de la valeur envoyé par l'utilisateur
@@ -59,7 +57,7 @@ export class Data {
 
         if ( resultFirstSearch.length > 0 ) {
             const dropdownListData = InternalFunctions.getAllDataTags(resultFirstSearch);
-
+            Interface.displayDropdownLists(dropdownListData);
             Interface.displayNewRecipes(resultFirstSearch);
         } else {
             Interface.showNotFindRecipe();
