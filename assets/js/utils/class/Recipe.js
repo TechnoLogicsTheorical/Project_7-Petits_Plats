@@ -39,7 +39,7 @@ export class Recipe {
             } else {
                 finalStringElements += `
                     <li>
-                        <span>${this._ingredientName} </span>
+                        <span>${this._ingredientName}: </span>
                     </li>
                 `;
             }
@@ -52,32 +52,34 @@ export class Recipe {
      * @returns {string}
      */
     createCard() {
-        return `
-            <article class="recipe-card">
-                <header class="image-wrapper">
+        const recipeCardContainer = document.createElement('article');
+        recipeCardContainer.className = 'recipe-card';
+        recipeCardContainer.innerHTML = `
+            <header class="image-wrapper">
 
-                </header>
+            </header>
 
-                <main class="details">
-                    <div class="header">
-                        <h2 class="title">${this._name}</h2>
-                        <span class="time-wrapper">
-                            <img src="assets/img/icons/recipeTime.svg" alt="Temps de préparation">
-                            <time>${this._time} min</time>
-                        </span>
-                    </div>
+            <main class="details">
+                <div class="header">
+                    <h2 class="title">${this._name}</h2>
+                    <span class="time-wrapper">
+                        <img src="assets/img/icons/recipeTime.svg" alt="Temps de préparation">
+                        <time>${this._time} min</time>
+                    </span>
+                </div>
 
-                    <div class="text">
-                        <ul class="ingredients">
-                            ${this.createIngredientsList()}
-                        </ul>
+                <div class="text">
+                    <ul class="ingredients">
+                        ${this.createIngredientsList()}
+                    </ul>
 
-                        <p class="instructions">
-                            ${this._description}
-                        </p>
-                    </div>
-                </main>
-            </article>
+                    <p class="instructions">
+                        ${this._description}
+                    </p>
+                </div>
+            </main>
         `;
+
+        return (recipeCardContainer);
     }
 }
