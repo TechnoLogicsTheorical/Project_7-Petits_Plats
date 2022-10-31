@@ -13,7 +13,7 @@ function attachInputSearchBar() {
     Elements.recipeSearchBar.addEventListener('input', (e) => {
         const typedUserValue = e.target.value;
         if ( typedUserValue.length >= 3 ) Data.submitedDataInputSearchBarValue(typedUserValue);
-        else Interface.displayDefaultRecipes(Data.getAllRecipes());
+        else Interface.displayDefaultRecipes();
     });
 }
 
@@ -33,11 +33,38 @@ function attachDropdownArrowIconClicked() {
     });
 }
 
+function attachDropdownInputSearch() {
+    const inputAddictiveSearch = [
+        Elements.ingredientsInput,
+        Elements.equipmentsInput,
+        Elements.ustensilsInput,
+    ];
+
+    inputAddictiveSearch.forEach( input => {
+        input.addEventListener('keyup', (e) => {
+            const inputElement = e.target;
+            const typedUserValue = inputElement.value;
+            // Récuperer la liste des élements actuelle dans la liste
+            // Ouvrir la liste si elle n'est pas ouverte ...
+            const currentList = inputElement.offsetParent.nextElementSibling;
+            let boolStringNotVisible = currentList.ariaHidden;
+
+            if (boolStringNotVisible === 'true') {
+                currentList.ariaHidden = 'false';
+            }
+
+
+        });
+    });
+}
+
 export class EventManager {
 
     static init() {
        preventDefaultForms();
        attachInputSearchBar();
        attachDropdownArrowIconClicked();
+       attachDropdownInputSearch();
     }
 }
+

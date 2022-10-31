@@ -47,6 +47,10 @@ export class Data {
         return recipes;
     }
 
+    static getAllListsDropdownData(recipes = this.getAllRecipes()) {
+        return InternalFunctions.getAllDataTags(recipes);
+    }
+
     static submitedDataInputSearchBarValue(dataInputValue) {
         const typedUserSearch = dataInputValue.toLowerCase();
         // Procéder à la recherche de la valeur envoyé par l'utilisateur
