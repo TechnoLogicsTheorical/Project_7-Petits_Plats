@@ -1,6 +1,7 @@
 .recipe-card {
-  min-width: 380px;
-  width: 30%;
+  //min-width: 380px;
+  height: 380px;
+  width: calc(30% - 25px);
   background: #E7E7E7;
   border-radius: 5px;
 }
@@ -49,6 +50,10 @@
     }
     .ingredients,
     .instructions {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 7;
+      overflow: hidden;
       width: 50%;
     }
   }

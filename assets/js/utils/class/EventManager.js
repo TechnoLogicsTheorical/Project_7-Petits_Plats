@@ -12,7 +12,7 @@ function preventDefaultForms() {
 function attachInputSearchBar() {
     Elements.recipeSearchBar.addEventListener('input', (e) => {
         const typedUserValue = e.target.value;
-        if ( typedUserValue.length >= 3 ) Data.submitedDataInputSearchBarValue(typedUserValue);
+        if ( typedUserValue.length >= 3 ) Data.submittedDataInputSearchBarValue(typedUserValue);
         else Interface.displayDefaultRecipes();
     });
 }
@@ -20,7 +20,7 @@ function attachInputSearchBar() {
 function attachDropdownArrowIconClicked() {
     Elements.allDropdownButtons.forEach( button => {
         button.addEventListener('click', (e)=> {
-            const clickedListElement = event.target.offsetParent.nextElementSibling;
+            const clickedListElement = e.target.offsetParent.nextElementSibling;
             let boolStringNotVisible = clickedListElement.ariaHidden;
 
             if (boolStringNotVisible === 'true') {
@@ -47,13 +47,51 @@ function attachDropdownInputSearch() {
             // Récuperer la liste des élements actuelle dans la liste
             // Ouvrir la liste si elle n'est pas ouverte ...
             const currentList = inputElement.offsetParent.nextElementSibling;
-            let boolStringNotVisible = currentList.ariaHidden;
 
-            if (boolStringNotVisible === 'true') {
-                currentList.ariaHidden = 'false';
+            if (typedUserValue.length > 0 ) {
+                Interface.showDropdownListButton(currentList);
+                // Filtrer les résultats
+                let filteredListElements = [];
+
+                if (currentList === Elements.ingredientsList) {
+                    filteredListElements = Data.allListsElements.ingredientElements.filter(listElement => {
+                        return (
+                            listElement.textContent
+                                .toLowerCase()
+                                .includes(typedUserValue.toLowerCase())
+                        )
+                    });
+                } else if (currentList === Elements.equipmentsList) {
+                    filteredListElements = Data.allListsElements.equipmentElements.filter(listElement => {
+                        return (
+                            listElement.textContent
+                                .toLowerCase()
+                                .includes(typedUserValue.toLowerCase())
+                        )
+                    });
+                } else if (currentList === Elements.ustensilsList) {
+                    filteredListElements = Data.allListsElements.ustensilElements.filter(listElement => {
+                        return (
+                            listElement.textContent
+                                .toLowerCase()
+                                .includes(typedUserValue.toLowerCase())
+                        )
+                    });
+                }
+
+                if ( filteredListElements.length === 0) {
+                    Interface.showNotFindElement(currentList);
+                }
+                else Interface.refreshDropdownList(currentList, filteredListElements);
             }
-
-
+            if (e.key === 'Backspace') {
+                inputElement.value = '';
+                if (Data.mainResultRecipes != null) {
+                    console.log(Data.mainResultRecipes)
+                    Interface.displayNewDropdownLists(Data.mainResultRecipes);
+                }
+                Interface.displayDefaultDropdownList();
+            }
         });
     });
 }
@@ -61,10 +99,10 @@ function attachDropdownInputSearch() {
 export class EventManager {
 
     static init() {
-       preventDefaultForms();
-       attachInputSearchBar();
-       attachDropdownArrowIconClicked();
-       attachDropdownInputSearch();
+        preventDefaultForms();
+        attachInputSearchBar();
+        attachDropdownArrowIconClicked();
+        attachDropdownInputSearch();
     }
 }
 

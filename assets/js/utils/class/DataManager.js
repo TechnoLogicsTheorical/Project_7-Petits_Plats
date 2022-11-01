@@ -1,9 +1,9 @@
-import {recipes} from "../../data/recipes.js";
-import {Interface} from "../class/Interface.js";
+import { recipes } from "../../data/recipes.js";
+import { Interface } from "../class/Interface.js";
 
 const InternalFunctions = {
     getFilteredRecipes(checkValue) {
-        return recipes.filter(currentRecipe => {
+        const filteredRecipes = recipes.filter(currentRecipe => {
             return (
                 currentRecipe.name.toLowerCase().includes(checkValue)
                 || currentRecipe.description.toLowerCase().includes(checkValue)
@@ -12,20 +12,22 @@ const InternalFunctions = {
                 })
             )
         });
+        if (filteredRecipes.length === 0) return null;
+        else return filteredRecipes;
     },
     getUniqueData(dataIncoming) {
         return [...new Set(dataIncoming)];
     },
-    getAllDataTags(recipes) {
-        const ingredientsData = recipes.flatMap( currentRecipe => {
+    getAllDataTags(rawRecipesObjects) {
+        const ingredientsData = rawRecipesObjects.flatMap( currentRecipe => {
             return currentRecipe.ingredients.map( currentIngredient => {
                 return currentIngredient.ingredient
             });
         });
-        const equipmentsData = recipes.map( currentRecipe => {
+        const equipmentsData = rawRecipesObjects.map( currentRecipe => {
             return currentRecipe.appliance
         });
-        const ustensilsData = recipes.flatMap( currentRecipe => {
+        const ustensilsData = rawRecipesObjects.flatMap( currentRecipe => {
             return currentRecipe.ustensils
         });
 
@@ -33,36 +35,40 @@ const InternalFunctions = {
         const equipmentsUniquesValues = this.getUniqueData(equipmentsData);
         const ustensilsUniquesValues = this.getUniqueData(ustensilsData);
 
-        return {
+        Data.allListsData = {
             ingredients: ingredientsUniquesValues,
             equipments: equipmentsUniquesValues,
             ustensils: ustensilsUniquesValues
         }
+
+        return Data.allListsData;
     },
 }
 
-export class Data {
 
+export class Data {
+    static mainResultRecipes = null;
+    static allListsElements = null;
     static getAllRecipes() {
         return recipes;
     }
 
-    static getAllListsDropdownData(recipes = this.getAllRecipes()) {
-        return InternalFunctions.getAllDataTags(recipes);
+    static getAllListsDropdownData(recipesObjects) {
+        return InternalFunctions.getAllDataTags(recipesObjects);
     }
 
-    static submitedDataInputSearchBarValue(dataInputValue) {
+    static submittedDataInputSearchBarValue(dataInputValue) {
         const typedUserSearch = dataInputValue.toLowerCase();
         // Procéder à la recherche de la valeur envoyé par l'utilisateur
-        const resultFirstSearch = InternalFunctions.getFilteredRecipes(typedUserSearch);
+        this.mainResultRecipes = InternalFunctions.getFilteredRecipes(typedUserSearch);
 
-        // Avec cette première recherche, l'utilisateur peut décider de s'arreter la ou procéder à une recherche plus approfondie par rapport aux tag ...
+        // Avec cette première recherche, l'utilisateur peut décider de s'arreter la ou procéder à une recherche plus approfondie par rapport aux tags ...
         // Pour cela, il est nécessaire d'abord de réafficher dans le conteneur de recette de l'interface les resultats trouvées
 
-        if ( resultFirstSearch.length > 0 ) {
-            const dropdownListData = InternalFunctions.getAllDataTags(resultFirstSearch);
-            Interface.displayDropdownLists(dropdownListData);
-            Interface.displayNewRecipes(resultFirstSearch);
+        if ( this.mainResultRecipes ) {
+            const dropdownListData = InternalFunctions.getAllDataTags(this.mainResultRecipes);
+            Interface.displayNewDropdownLists(dropdownListData);
+            Interface.displayNewRecipes(this.mainResultRecipes);
         } else {
             Interface.showNotFindRecipe();
         }

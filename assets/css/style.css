@@ -208,8 +208,8 @@ input::-webkit-calendar-picker-indicator {
 }
 
 .recipe-card {
-  min-width: 380px;
-  width: 30%;
+  height: 380px;
+  width: calc(30% - 25px);
   background: #E7E7E7;
   border-radius: 5px;
 }
@@ -253,6 +253,10 @@ input::-webkit-calendar-picker-indicator {
 }
 .recipe-card .details .text .ingredients,
 .recipe-card .details .text .instructions {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;
+  overflow: hidden;
   width: 50%;
 }
 
@@ -260,7 +264,7 @@ input::-webkit-calendar-picker-indicator {
   display: flex;
   flex-wrap: wrap;
   margin: 25px auto;
-  justify-content: center;
+  justify-content: space-between;
   gap: 50px;
 }
 
