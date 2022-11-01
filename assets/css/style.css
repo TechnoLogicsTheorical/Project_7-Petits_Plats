@@ -97,7 +97,7 @@ input::-webkit-calendar-picker-indicator {
 .filter-element.equipment {
   background: var(--green-color);
 }
-.filter-element.utensil {
+.filter-element.ustensil {
   background: var(--orange-color);
 }
 

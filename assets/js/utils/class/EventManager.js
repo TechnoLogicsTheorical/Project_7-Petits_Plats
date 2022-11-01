@@ -3,106 +3,119 @@ import * as Elements from "../constElements.js";
 import { Data } from "../class/DataManager.js";
 import { Interface } from "../class/Interface.js";
 
-function preventDefaultForms() {
-    Elements.allForms.forEach( form => {
-        form.addEventListener('submit', (e) => e.preventDefault());
-    });
-}
 
-function attachInputSearchBar() {
-    Elements.recipeSearchBar.addEventListener('input', (e) => {
-        const typedUserValue = e.target.value;
-        if ( typedUserValue.length >= 3 ) Data.submittedDataInputSearchBarValue(typedUserValue);
-        else Interface.displayDefaultRecipes();
-    });
-}
+const InternalFunctions = {
+    attachDropdownInputSearch() {
+        const inputAddictiveSearch = [
+            Elements.ingredientsInput,
+            Elements.equipmentsInput,
+            Elements.ustensilsInput,
+        ];
 
-function attachDropdownArrowIconClicked() {
-    Elements.allDropdownButtons.forEach( button => {
-        button.addEventListener('click', (e)=> {
-            const clickedListElement = e.target.offsetParent.nextElementSibling;
-            let boolStringNotVisible = clickedListElement.ariaHidden;
+        inputAddictiveSearch.forEach( input => {
+            input.addEventListener('keyup', (e) => {
+                const inputElement = e.target;
+                const typedUserValue = inputElement.value;
+                // Récuperer la liste des élements actuelle dans la liste
+                // Ouvrir la liste si elle n'est pas ouverte ...
+                const currentList = inputElement.offsetParent.nextElementSibling;
 
-            if (boolStringNotVisible === 'true') {
-                clickedListElement.ariaHidden = 'false';
-            }
-            else if (boolStringNotVisible === 'false') {
-                clickedListElement.ariaHidden = 'true';
-            }
+                if (typedUserValue.length > 0 ) {
+                    Interface.showDropdownListButton(currentList);
+                    // Filtrer les résultats
+                    let filteredListElements = [];
+
+                    if (currentList === Elements.ingredientsList) {
+                        filteredListElements = Data.allListsElements.ingredientElements.filter(listElement => {
+                            return (
+                                listElement.textContent
+                                    .toLowerCase()
+                                    .includes(typedUserValue.toLowerCase())
+                            )
+                        });
+                    } else if (currentList === Elements.equipmentsList) {
+                        filteredListElements = Data.allListsElements.equipmentElements.filter(listElement => {
+                            return (
+                                listElement.textContent
+                                    .toLowerCase()
+                                    .includes(typedUserValue.toLowerCase())
+                            )
+                        });
+                    } else if (currentList === Elements.ustensilsList) {
+                        filteredListElements = Data.allListsElements.ustensilElements.filter(listElement => {
+                            return (
+                                listElement.textContent
+                                    .toLowerCase()
+                                    .includes(typedUserValue.toLowerCase())
+                            )
+                        });
+                    }
+
+                    if ( filteredListElements.length === 0) {
+                        Interface.showNotFindElement(currentList);
+                    }
+                    else Interface.refreshDropdownList(currentList, filteredListElements);
+                }
+                if (e.key === 'Backspace') {
+                    inputElement.value = '';
+                    if (Data.mainResultRecipes != null) {
+                        console.log(Data.mainResultRecipes)
+                        Interface.displayNewDropdownLists(Data.mainResultRecipes);
+                    }
+                    Interface.displayDefaultDropdownList();
+                }
+            });
         });
-    });
-}
+    },
+    attachDropdownArrowIconClicked() {
+        Elements.allDropdownButtons.forEach( button => {
+            button.addEventListener('click', (e)=> {
+                const clickedListElement = e.target.offsetParent.nextElementSibling;
+                let boolStringNotVisible = clickedListElement.ariaHidden;
 
-function attachDropdownInputSearch() {
-    const inputAddictiveSearch = [
-        Elements.ingredientsInput,
-        Elements.equipmentsInput,
-        Elements.ustensilsInput,
-    ];
-
-    inputAddictiveSearch.forEach( input => {
-        input.addEventListener('keyup', (e) => {
-            const inputElement = e.target;
-            const typedUserValue = inputElement.value;
-            // Récuperer la liste des élements actuelle dans la liste
-            // Ouvrir la liste si elle n'est pas ouverte ...
-            const currentList = inputElement.offsetParent.nextElementSibling;
-
-            if (typedUserValue.length > 0 ) {
-                Interface.showDropdownListButton(currentList);
-                // Filtrer les résultats
-                let filteredListElements = [];
-
-                if (currentList === Elements.ingredientsList) {
-                    filteredListElements = Data.allListsElements.ingredientElements.filter(listElement => {
-                        return (
-                            listElement.textContent
-                                .toLowerCase()
-                                .includes(typedUserValue.toLowerCase())
-                        )
-                    });
-                } else if (currentList === Elements.equipmentsList) {
-                    filteredListElements = Data.allListsElements.equipmentElements.filter(listElement => {
-                        return (
-                            listElement.textContent
-                                .toLowerCase()
-                                .includes(typedUserValue.toLowerCase())
-                        )
-                    });
-                } else if (currentList === Elements.ustensilsList) {
-                    filteredListElements = Data.allListsElements.ustensilElements.filter(listElement => {
-                        return (
-                            listElement.textContent
-                                .toLowerCase()
-                                .includes(typedUserValue.toLowerCase())
-                        )
-                    });
+                if (boolStringNotVisible === 'true') {
+                    clickedListElement.ariaHidden = 'false';
                 }
-
-                if ( filteredListElements.length === 0) {
-                    Interface.showNotFindElement(currentList);
+                else if (boolStringNotVisible === 'false') {
+                    clickedListElement.ariaHidden = 'true';
                 }
-                else Interface.refreshDropdownList(currentList, filteredListElements);
-            }
-            if (e.key === 'Backspace') {
-                inputElement.value = '';
-                if (Data.mainResultRecipes != null) {
-                    console.log(Data.mainResultRecipes)
-                    Interface.displayNewDropdownLists(Data.mainResultRecipes);
-                }
-                Interface.displayDefaultDropdownList();
-            }
+            });
         });
-    });
+    },
+    attachInputSearchBar() {
+        Elements.recipeSearchBar.addEventListener('input', (e) => {
+            const typedUserValue = e.target.value;
+            if ( typedUserValue.length >= 3 ) Data.submittedDataInputSearchBarValue(typedUserValue);
+            else Interface.displayDefaultRecipes();
+        });
+    },
+    preventDefaultForms() {
+        Elements.allForms.forEach( form => {
+            form.addEventListener('submit', (e) => e.preventDefault());
+        });
+    },
 }
+
+//TODO: Créer un event lorsque un éléménts de la liste est clickée
 
 export class EventManager {
 
     static init() {
-        preventDefaultForms();
-        attachInputSearchBar();
-        attachDropdownArrowIconClicked();
-        attachDropdownInputSearch();
+        InternalFunctions.preventDefaultForms();
+        InternalFunctions.attachInputSearchBar();
+        InternalFunctions.attachDropdownArrowIconClicked();
+        InternalFunctions.attachDropdownInputSearch();
+    }
+
+    static attachItemListEventToAddTag(itemListElement) {
+        itemListElement.addEventListener('click', (e) => {
+            const clickedElement = e.target;
+            const textValue = clickedElement.textContent;
+            const typeItemElement = clickedElement.dataset.item_type;
+
+            Data.addTagToList(textValue, typeItemElement);
+            Interface.displayNewTag(textValue, typeItemElement);
+        });
     }
 }
 

@@ -2,6 +2,7 @@ import * as Elements from "../constElements.js";
 
 import { Recipe } from "../class/Recipe.js";
 import { Data } from "../class/DataManager.js";
+import { EventManager } from "../class/EventManager.js";
 
 const InternalFunctions = {
     CardView: {
@@ -32,6 +33,7 @@ const InternalFunctions = {
             const itemElement = document.createElement('li');
             itemElement.dataset.item_type = itemType;
             itemElement.innerHTML = data;
+            EventManager.attachItemListEventToAddTag(itemElement);
 
             return itemElement;
         },
@@ -54,6 +56,25 @@ const InternalFunctions = {
             Elements.ustensilsList.innerHTML = "";
         },
     },
+    TagView: {
+        createTagElement(textValue, stringClassName) {
+            const tagElementContainer = document.createElement('div');
+            tagElementContainer.className = 'filter-element ' + stringClassName;
+
+            const textContentValue = document.createElement('span');
+            textContentValue.className = 'title';
+            textContentValue.textContent = textValue;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'delete';
+            deleteButton.innerHTML = `<img src="assets/img/icons/crossAround.svg" alt="Supprimer l'élément">`;
+
+            tagElementContainer.appendChild(textContentValue);
+            tagElementContainer.appendChild(deleteButton);
+
+            return tagElementContainer;
+        },
+    }
 }
 
 export class Interface {
@@ -63,6 +84,7 @@ export class Interface {
     }
 
     static displayNewRecipes(filteredRecipes) {
+        console.log(filteredRecipes)
         InternalFunctions.CardView.clearRecipeContainer();
         InternalFunctions.CardView.createCards(filteredRecipes);
 
@@ -139,5 +161,21 @@ export class Interface {
 
     static showNotFindElement(currentList) {
         currentList.innerHTML = 'Aucun éléments ne correspond à la recherche !';
+    }
+
+    static showTagContainer() {
+        const tagContainer = Elements.filterContainer;
+        let stringBoolNotVisible = tagContainer.ariaHidden;
+
+        if (stringBoolNotVisible === 'true') {
+            Elements.filterContainer.ariaHidden = 'false';
+        }
+    }
+
+    static displayNewTag(textValue, typeItemElement) {
+        const tagElement = InternalFunctions.TagView.createTagElement(textValue, typeItemElement);
+
+        Interface.showTagContainer();
+        Elements.filterContainer.appendChild(tagElement);
     }
 }

@@ -1,5 +1,5 @@
-import { recipes } from "../../data/recipes.js";
-import { Interface } from "../class/Interface.js";
+import {recipes} from "../../data/recipes.js";
+import {Interface} from "../class/Interface.js";
 
 const InternalFunctions = {
     getFilteredRecipes(checkValue) {
@@ -43,12 +43,25 @@ const InternalFunctions = {
 
         return Data.allListsData;
     },
+    checkedIfTagsExists() {
+        const ingredientsTags = (Data.tagLists.ingredients.length === 0);
+        const equipmentsTags = (Data.tagLists.equipments.length === 0);
+        const ustensilsTags = (Data.tagLists.ustensils.length === 0);
+
+        return (ingredientsTags || equipmentsTags || ustensilsTags);
+    },
 }
 
 
 export class Data {
     static mainResultRecipes = null;
     static allListsElements = null;
+    static tagLists = {
+        ingredients: [],
+        equipments: [],
+        ustensils: [],
+    }
+
     static getAllRecipes() {
         return recipes;
     }
@@ -73,7 +86,63 @@ export class Data {
             Interface.showNotFindRecipe();
         }
 
-        // Par la suite, il faut afficher les tags dans les composants de l'interface à savoir les DropDown Buttons
+        //TODO: Par la suite, il faut afficher les tags dans les composants de l'interface à savoir les DropDown Buttons
 
+    }
+
+    static addTagToList(textValue, typeItemElement) {
+        switch (typeItemElement) {
+            case 'ingredient':
+                Data.tagLists.ingredients.push(textValue);
+                Data.refreshSearchRecipes(textValue, typeItemElement);
+                break;
+            case 'equipment':
+                Data.tagLists.equipments.push(textValue);
+                Data.refreshSearchRecipes(textValue, typeItemElement);
+                break;
+            case 'ustensil':
+                Data.tagLists.ustensils.push(textValue);
+                Data.refreshSearchRecipes(textValue, typeItemElement);
+                break;
+        }
+    }
+
+    static getSpecialFilteredRecipes(textValue, typeItemElement) {
+        let addictiveFiltered = null;
+        const currentRecipes = Data.mainResultRecipes || Data.getAllRecipes();
+
+        if ( typeItemElement === 'ingredient') {
+            addictiveFiltered = currentRecipes.filter( recipe => {
+                return recipe.ingredients.some( ingredientValues => {
+                    return ingredientValues.ingredient.toLowerCase().includes(textValue);
+                });
+            });
+        } else if ( typeItemElement === 'equipment' ) {
+            addictiveFiltered = currentRecipes.filter( recipe => {
+                return recipe.appliance.toLowerCase().includes(textValue);
+            });
+        } else if ( typeItemElement === 'ustensil' ) {
+            addictiveFiltered = currentRecipes.filter( recipe => {
+                return recipe.ustensils.some( ustensilValue => {
+                    return ustensilValue.toLowerCase().includes(textValue);
+                });
+            });
+        }
+
+        return addictiveFiltered;
+    }
+
+    static refreshSearchRecipes(textValue, typeItemElement) {
+        const tagValueToLower = textValue.toLowerCase();
+
+        if (Data.mainResultRecipes != null) {
+            // Si le tableau contient de recette et que les tableaux, également de tagList on une entrée alors on recherche les recettes avec la recherche existante plus la reflitration des recettes avec les valeurs
+            // console.log(InternalFunctions.checkedIfTagsExists());
+            Data.mainResultRecipes = this.getSpecialFilteredRecipes(tagValueToLower, typeItemElement);
+            Interface.displayNewRecipes(Data.mainResultRecipes);
+        } else {
+            Data.mainResultRecipes = this.getSpecialFilteredRecipes(tagValueToLower, typeItemElement);
+            Interface.displayNewRecipes(Data.mainResultRecipes);
+        }
     }
 }
