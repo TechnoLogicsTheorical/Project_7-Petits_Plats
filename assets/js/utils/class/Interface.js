@@ -68,6 +68,7 @@ const InternalFunctions = {
             const deleteButton = document.createElement('button');
             deleteButton.className = 'delete';
             deleteButton.innerHTML = `<img src="assets/img/icons/crossAround.svg" alt="Supprimer l'élément">`;
+            EventManager.attachRemoveTagToList(deleteButton);
 
             tagElementContainer.appendChild(textContentValue);
             tagElementContainer.appendChild(deleteButton);
@@ -176,5 +177,9 @@ export class Interface {
 
         Interface.showTagContainer();
         Elements.filterContainer.appendChild(tagElement);
+    }
+
+    static removeTagElement(tagElement) {
+        Elements.filterContainer.removeChild(tagElement);
     }
 }

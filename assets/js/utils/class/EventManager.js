@@ -58,9 +58,9 @@ const InternalFunctions = {
                 }
                 if (e.key === 'Backspace') {
                     inputElement.value = '';
-                    if (Data.mainResultRecipes != null) {
-                        console.log(Data.mainResultRecipes)
-                        Interface.displayNewDropdownLists(Data.mainResultRecipes);
+                    if (Data.resultRecipesWithSearchBar != null) {
+                        console.log(Data.resultRecipesWithSearchBar)
+                        Interface.displayNewDropdownLists(Data.resultRecipesWithSearchBar);
                     }
                     Interface.displayDefaultDropdownList();
                 }
@@ -114,6 +114,19 @@ export class EventManager {
             const typeItemElement = clickedElement.dataset.item_type;
 
             Data.addTagToList(textValue, typeItemElement);
+        });
+    }
+
+    static attachRemoveTagToList(deleteButtonElement) {
+        deleteButtonElement.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const clickedElement = e.target;
+            const tagElement = clickedElement.parentElement.parentElement;
+            const tagElementValue = tagElement.textContent;
+            const typeElement = tagElement.classList[1];
+
+            Interface.removeTagElement(tagElement);
+            Data.removeTagToList(tagElementValue, typeElement)
         });
     }
 }
