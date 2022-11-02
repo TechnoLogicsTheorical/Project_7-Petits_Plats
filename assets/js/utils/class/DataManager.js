@@ -43,10 +43,10 @@ const InternalFunctions = {
 
         return Data.allListsData;
     },
-    checkedIfTagsExists() {
-        const ingredientsTags = (Data.tagLists.ingredients.length === 0);
-        const equipmentsTags = (Data.tagLists.equipments.length === 0);
-        const ustensilsTags = (Data.tagLists.ustensils.length === 0);
+    checkedIfTagsExists(value) {
+        const ingredientsTags = Data.tagLists.ingredients.includes(value);
+        const equipmentsTags = Data.tagLists.equipments.includes(value) ;
+        const ustensilsTags = Data.tagLists.ustensils.includes(value);
 
         return (ingredientsTags || equipmentsTags || ustensilsTags);
     },
@@ -93,14 +93,26 @@ export class Data {
     static addTagToList(textValue, typeItemElement) {
         switch (typeItemElement) {
             case 'ingredient':
+                if (InternalFunctions.checkedIfTagsExists(textValue)) {
+                    break;
+                }
+                Interface.displayNewTag(textValue, typeItemElement);
                 Data.tagLists.ingredients.push(textValue);
                 Data.refreshSearchRecipes(textValue, typeItemElement);
                 break;
             case 'equipment':
+                if (InternalFunctions.checkedIfTagsExists(textValue)) {
+                    return;
+                }
+                Interface.displayNewTag(textValue, typeItemElement);
                 Data.tagLists.equipments.push(textValue);
                 Data.refreshSearchRecipes(textValue, typeItemElement);
                 break;
             case 'ustensil':
+                if (InternalFunctions.checkedIfTagsExists(textValue)) {
+                    return;
+                }
+                Interface.displayNewTag(textValue, typeItemElement);
                 Data.tagLists.ustensils.push(textValue);
                 Data.refreshSearchRecipes(textValue, typeItemElement);
                 break;
@@ -137,7 +149,6 @@ export class Data {
 
         if (Data.mainResultRecipes != null) {
             // Si le tableau contient de recette et que les tableaux, également de tagList on une entrée alors on recherche les recettes avec la recherche existante plus la reflitration des recettes avec les valeurs
-            // console.log(InternalFunctions.checkedIfTagsExists());
             Data.mainResultRecipes = this.getSpecialFilteredRecipes(tagValueToLower, typeItemElement);
             Interface.displayNewRecipes(Data.mainResultRecipes);
         } else {

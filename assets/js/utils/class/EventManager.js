@@ -114,7 +114,6 @@ export class EventManager {
             const typeItemElement = clickedElement.dataset.item_type;
 
             Data.addTagToList(textValue, typeItemElement);
-            Interface.displayNewTag(textValue, typeItemElement);
         });
     }
 }

@@ -84,7 +84,6 @@ export class Interface {
     }
 
     static displayNewRecipes(filteredRecipes) {
-        console.log(filteredRecipes)
         InternalFunctions.CardView.clearRecipeContainer();
         InternalFunctions.CardView.createCards(filteredRecipes);
 
