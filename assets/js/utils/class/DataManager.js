@@ -201,7 +201,11 @@ export class Data {
         }
         if (InternalFunctions.noValuesInTags()) {
             Data.resultRecipesWithFilteredTags = null
-            Interface.displayDefaultRecipes();
+            if (Data.resultRecipesWithSearchBar) {
+                Interface.displayNewRecipes(Data.resultRecipesWithSearchBar);
+            } else {
+                Interface.displayDefaultRecipes();
+            }
         } else {
             Data.remakeAllSearch();
         }
