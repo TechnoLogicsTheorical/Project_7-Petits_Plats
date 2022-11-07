@@ -1,5 +1,6 @@
 import {recipes} from "../../data/recipes.js";
 import {Interface} from "../class/Interface.js";
+import { allForms } from "../constElements.js";
 
 const InternalFunctions = {
     getFilteredRecipes(checkValue) {
@@ -181,21 +182,21 @@ export class Data {
     }
 
     static removeTagToList(textElementValue, typeElement) {
-
+        console.log('remove event')
         switch (typeElement) {
             case 'ingredient':
                 Data.tagLists.ingredients = Data.tagLists.ingredients.filter(ingredient => {
                     return ingredient !== textElementValue;
                 });
                 break;
-            case 'equipement':
+            case 'equipment':
                 Data.tagLists.equipments = Data.tagLists.equipments.filter(equipment => {
                     return equipment !== textElementValue;
                 });
                 break;
             case 'ustensil':
-                Data.tagLists.ustensils = Data.tagLists.ustensils.filter(equipment => {
-                    return equipment !== textElementValue;
+                Data.tagLists.ustensils = Data.tagLists.ustensils.filter(ustensil => {
+                    return ustensil !== textElementValue;
                 });
                 break;
         }
