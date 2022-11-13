@@ -1,4 +1,8 @@
-export const recipes = [
+import { DOM_ELEMENTS } from "../misc/constElements.js";
+import { DropdownList } from "../components/DropdownList.js";
+import { Results } from "../managers/SearchEngine.js";
+
+const RECIPES = [
     {
         "id": 1,
         "name" : "Limonade de Coco",
@@ -359,7 +363,7 @@ export const recipes = [
         "time": 60,
         "description": "Commencer par cuire les pommes de terre dans l'eau bouillante. Puis épluchez les et coupez les en rondelles. Émincer les oignons puis les faire dorer dans du beurre. Ajouter le jambon fumé coupé en en morceaux ainsi que les pommes de terres. Salez, poivrez à votre gout ( et celui de vos convives ) Laissez cuisiner durant environ 10 minutes puis ajouter le vin blanc. Après 5 minutes, mettre le tout dans un plat à gratin. Coupez le reblochon, soit en tranches, soit le couper en 2 dans le sens de l'épaisseur et recouvrir les pommes de terre. Cuire au four (environ 220°) durant 25 minutes. C'est prêt !",
         "appliance":"Four",
-        "ustensils": ["plat à gratin", "couteau","Économe"]
+        "ustensils": ["plat à gratin", "couteau","économe"]
     },{
         "id": 11,
         "name": "Salade tomate, mozzarella et pommes",
@@ -381,7 +385,7 @@ export const recipes = [
                 "unit": "tranches"
             },
             {
-                "ingredient": "Pommes",
+                "ingredient": "Pomme",
                 "quantity": 1
             },
             {
@@ -409,7 +413,7 @@ export const recipes = [
                 "unit": "grammes"
             },
             {
-                "ingredient": "Pommes",
+                "ingredient": "Pomme",
                 "quantity": 8
             },
             {
@@ -569,7 +573,7 @@ export const recipes = [
                 "unit":"tiges"
             },
             {
-                "ingredient": "huile d'olives",
+                "ingredient": "huile d'olive",
                 "quantity": 2,
                 "unit": "cuillère à soupe"
             }
@@ -908,7 +912,7 @@ export const recipes = [
                 "quantity": 1
             },
             {
-                "ingredient": "Huile d'olives"
+                "ingredient": "Huile d'olive"
             },
             {
                 "ingredient": "Oignon",
@@ -1082,7 +1086,7 @@ export const recipes = [
         "time": 60,
         "description":"Découper en cubes les carottes et pommes de terre. Faire revenir dans du beurre. Ajouter les lardons, une fois les lardons dorés, ajouter un grand verre d'eau. Ajouter les petit poids et les haricots verts ( tous deux pré cuits ). Ajouter Sel, poivre, thyms et laurier",
         "appliance": "Poêle",
-        "ustensils":["Couteau", "économe"]
+        "ustensils":["couteau", "économe"]
     },
     {
         "id": 32,
@@ -1281,7 +1285,7 @@ export const recipes = [
                 "unit": "grammes"
             },
             {
-                "ingredient": "Huile d'olives",
+                "ingredient": "Huile d'olive",
                 "quantity": 25,
                 "unit": "cl"
             },
@@ -1665,7 +1669,7 @@ export const recipes = [
                 "quantity": 2
             },
             {
-                "ingredient": "Kiwis",
+                "ingredient": "Kiwi",
                 "quantity": 3
             },
             {
@@ -1723,4 +1727,124 @@ export const recipes = [
         "appliance": "Four",
         "ustensils":["rouleau à patisserie","fouet"]
     }
-]
+];
+
+export class Data {
+    static #allRecipes = RECIPES;
+
+    static currentTags = {
+        ingredients: [],
+        equipments: [],
+        ustensils: [],
+    }
+
+    static dropdownLists = {
+        ingredients: new DropdownList(DOM_ELEMENTS.DropdownLists.ingredient, 'ingredient'),
+        equipments: new DropdownList(DOM_ELEMENTS.DropdownLists.equipment, 'equipment'),
+        ustensils: new DropdownList(DOM_ELEMENTS.DropdownLists.ustensil, 'ustensil'),
+    }
+
+    static getAllRecipes() {
+        return Data.#allRecipes;
+    }
+
+    static getPartialObjectForRecipes() {
+        return Data.#allRecipes.map( recipe => {
+            return {
+                name: recipe.name,
+                time: recipe.time,
+                description: recipe.description,
+                ingredients: recipe.ingredients
+            }
+        });
+    };
+
+    static _deleteDuplicatedValue(objectArraysValues) {
+        return [...new Set(objectArraysValues)];
+    }
+
+    static getObjectInformationsForDataTags( recipesArray ) {
+        if ( !recipesArray ) {
+            return console.error(new Error('Gettings failed: For Dropdown Lists'));
+        }
+        let ingredients = recipesArray.flatMap( currentRecipe => {
+            return currentRecipe.ingredients.map( currentIngredient => {
+                return currentIngredient.ingredient
+            });
+        });
+        ingredients = this._deleteDuplicatedValue(ingredients);
+
+        let equipments = recipesArray.map( currentRecipe => {
+            return currentRecipe.appliance
+        });
+        equipments = this._deleteDuplicatedValue(equipments);
+
+        let ustensils = recipesArray.flatMap( currentRecipe => {
+            return currentRecipe.ustensils
+        });
+        ustensils = this._deleteDuplicatedValue(ustensils);
+
+        return {
+            ingredientsTextTags: ingredients,
+            equipmentsTextTags: equipments,
+            ustensilsTextTags: ustensils,
+        }
+    }
+
+    static getFilteredRecipes(checkValue) {
+        const defaultRecipes = Data.getAllRecipes();
+        const filteredRecipes = defaultRecipes.filter(currentRecipe => {
+            return (
+                currentRecipe.name.toLowerCase().includes(checkValue)
+                || currentRecipe.description.toLowerCase().includes(checkValue)
+                || currentRecipe.ingredients.some((ingredient) => {
+                    ingredient.ingredient.toLowerCase().includes(checkValue)
+                })
+            );
+        });
+        if (filteredRecipes.length === 0) return null;
+        else return filteredRecipes;
+    }
+
+    static getSpecialFilteredRecipes(currentRecipes) {
+        let addictiveFiltered = null;
+
+        if ( Data.currentTags.ingredients.length !== 0 ) {
+            Data.currentTags.ingredients.forEach( tagValue => {
+                addictiveFiltered = currentRecipes.filter( recipe => {
+                    return recipe.ingredients.some( ingredientValues => {
+                        return ingredientValues.ingredient.toLowerCase().includes(tagValue);
+                    });
+                });
+            });
+        }
+        if ( Data.currentTags.equipments.length !== 0 ) {
+            Data.currentTags.equipments.forEach( tagValue => {
+                addictiveFiltered = currentRecipes.filter(recipe => {
+                    return recipe.appliance.toLowerCase().includes(tagValue);
+                });
+            });
+        }
+        if ( Data.currentTags.ustensils.length !== 0 ) {
+            Data.currentTags.ustensils.forEach( tagValue => {
+                addictiveFiltered = currentRecipes.filter(recipe => {
+                    return recipe.ustensils.some(ustensilValue => {
+                        return ustensilValue.toLowerCase().includes(tagValue);
+                    });
+                });
+            });
+        }
+        if (addictiveFiltered !== null) {
+            return addictiveFiltered;
+        }
+        return null;
+    }
+
+    static checkIfTagsExists() {
+        const haveIngredients = Data.currentTags.ingredients.length !== 0;
+        const haveEquipments = Data.currentTags.equipments.length !== 0;
+        const haveUstensils = Data.currentTags.ustensils.length !== 0;
+
+        return (haveIngredients || haveEquipments || haveUstensils);
+    }
+}
