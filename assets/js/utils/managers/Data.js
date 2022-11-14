@@ -1,6 +1,5 @@
 import { DOM_ELEMENTS } from "../misc/constElements.js";
 import { DropdownList } from "../components/DropdownList.js";
-import { Results } from "../managers/SearchEngine.js";
 
 const RECIPES = [
     {
@@ -1793,17 +1792,26 @@ export class Data {
 
     static getFilteredRecipes(checkValue) {
         const defaultRecipes = Data.getAllRecipes();
-        const filteredRecipes = defaultRecipes.filter(currentRecipe => {
-            return (
-                currentRecipe.name.toLowerCase().includes(checkValue)
-                || currentRecipe.description.toLowerCase().includes(checkValue)
-                || currentRecipe.ingredients.some((ingredient) => {
-                    ingredient.ingredient.toLowerCase().includes(checkValue)
-                })
-            );
-        });
-        if (filteredRecipes.length === 0) return null;
-        else return filteredRecipes;
+        const filteredLoopRecipes = [];
+
+        for (let i=0; i < defaultRecipes.length; i++) {
+
+            const includesName = defaultRecipes[i].name.toLowerCase().includes(checkValue);
+            const includesDescription = defaultRecipes[i].description.toLowerCase().includes(checkValue);
+            let includesIngredients = false;
+
+            for (let j=0; j < defaultRecipes[i].ingredients.length; j++) {
+                includesIngredients = defaultRecipes[i].ingredients[j].ingredient.toLowerCase().includes(checkValue);
+                if (includesIngredients) {break;}
+            }
+
+            if (includesName || includesDescription || includesIngredients ) {
+                filteredLoopRecipes.push(defaultRecipes[i]);
+            }
+        }
+
+        if (filteredLoopRecipes.length === 0) return null;
+        else return filteredLoopRecipes;
     }
 
     static getSpecialFilteredRecipes(currentRecipes) {
