@@ -1,6 +1,5 @@
 import { DOM_ELEMENTS } from "../misc/constElements.js";
 import { DropdownList } from "../components/DropdownList.js";
-import { Results } from "../managers/SearchEngine.js";
 
 const RECIPES = [
     {

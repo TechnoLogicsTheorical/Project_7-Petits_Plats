@@ -74,9 +74,13 @@ export class SearchEngine {
                 Results.emit('second', gettingFilteringByExistResults);
                 return;
             }
-        }
 
-        if ( haveMainSearchResults == null && haveTags ) {
+            const currentRecipes = Results.get('second') || Data.getAllRecipes();
+            const newFilteredRecipes = Data.getSpecialFilteredRecipes(currentRecipes);
+            Interface.refreshInterface(newFilteredRecipes);
+            Results.emit('second', newFilteredRecipes);
+            return;
+        } else if ( haveTags ) {
             const currentRecipes = Results.get('second') || Data.getAllRecipes();
             const newFilteredRecipes = Data.getSpecialFilteredRecipes(currentRecipes);
             Interface.refreshInterface(newFilteredRecipes);

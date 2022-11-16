@@ -57,7 +57,7 @@ export const EVENTS = {
                 SearchEngine.proceedPrincipalSearch(typedUserValue);
                 return;
             }
-            Interface.defaultDisplay()
+            Interface.defaultDisplay();
             Results.clearAll();
         }
     }
