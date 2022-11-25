@@ -1731,22 +1731,38 @@ const RECIPES = [
 export class Data {
     static #allRecipes = RECIPES;
 
+    /**
+     * Liste des tags qui ont été ajoutées dans l'interface de recherche pour filtrer par les filtres additionnelles
+     * @type {{equipments: [], ustensils: [], ingredients: []}}
+     */
     static currentTags = {
         ingredients: [],
         equipments: [],
         ustensils: [],
     }
 
+    /**
+     * Stocke les boutons listes du document HTML
+     * @type {{equipments: DropdownList, ustensils: DropdownList, ingredients: DropdownList}}
+     */
     static dropdownLists = {
         ingredients: new DropdownList(DOM_ELEMENTS.DropdownLists.ingredient, 'ingredient'),
         equipments: new DropdownList(DOM_ELEMENTS.DropdownLists.equipment, 'equipment'),
         ustensils: new DropdownList(DOM_ELEMENTS.DropdownLists.ustensil, 'ustensil'),
     }
 
+    /**
+     * Permet de renvoyer la liste de toutes les recettes par défaut
+     * @returns  Retourne les 50 recettes existantes
+     */
     static getAllRecipes() {
         return Data.#allRecipes;
     }
 
+    /**
+     * Renvoie un objet partiel contenant les propriétés seulement nécessaires à l'affichage
+     * @returns {{name: *, description: *, ingredients: *, time: *}[]}
+     */
     static getPartialObjectForRecipes() {
         return Data.#allRecipes.map( recipe => {
             return {
@@ -1758,10 +1774,21 @@ export class Data {
         });
     };
 
+    /**
+     * Supprimer les entrées qui peuvent être en doublons dans une liste
+     * @param objectArraysValues
+     * @returns {any[]}
+     * @private
+     */
     static _deleteDuplicatedValue(objectArraysValues) {
         return [...new Set(objectArraysValues)];
     }
 
+    /**
+     * Permet d'extraire des proprietes des objets contenu dans le tableau de recette afin de n'avoir que le texte pour construire les éléments de liste dans les Dropdowns Buttons
+     * @param recipesArray Tableau de recettes
+     * @returns {{equipmentsTextTags: *[], ustensilsTextTags: *[], ingredientsTextTags: *[]}|void}
+     */
     static getObjectInformationsForDataTags( recipesArray ) {
         if ( !recipesArray ) {
             return console.error(new Error('Gettings failed: For Dropdown Lists'));
@@ -1790,7 +1817,13 @@ export class Data {
         }
     }
 
+    /**
+     * Filtre les recettes
+     * @param checkValue Valeur du texte saisie par l'utilisateur (toLowerCase) utilisée en amont
+     * @returns Renvoie un tableau de recettes filtrées par la valeur du champs saisie par l'utilisateur
+     */
     static getFilteredRecipes(checkValue) {
+        //TODO: pourquoi le filtre est donnée avec celle par défaut ?
         const defaultRecipes = Data.getAllRecipes();
         const filteredRecipes = defaultRecipes.filter(currentRecipe => {
             return (
@@ -1805,6 +1838,11 @@ export class Data {
         else return filteredRecipes;
     }
 
+    /**
+     * Filtre les recettes selons les tags qui sont existants
+     * @param currentRecipes Tableau de recettes déja trouvées
+     * @returns {null} Renvoie un tableau de recettes filtrées par le biais des tags
+     */
     static getSpecialFilteredRecipes(currentRecipes) {
         let addictiveFiltered = null;
 
@@ -1839,6 +1877,10 @@ export class Data {
         return null;
     }
 
+    /**
+     * Permet de savoir, si il y a des données existantes dans les tableaux contenants les tags
+     * @returns {true || false}
+     */
     static checkIfTagsExists() {
         const haveIngredients = Data.currentTags.ingredients.length !== 0;
         const haveEquipments = Data.currentTags.equipments.length !== 0;

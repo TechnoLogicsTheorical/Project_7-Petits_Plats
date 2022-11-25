@@ -1,53 +1,72 @@
 import { Data } from "../managers/Data.js";
 import { Interface } from "../Interface.js";
 
+/**
+ * Objet static s'occupant du stockage des resultats de recherche
+ */
 export class Results {
-    static data = {
+    /**
+     * Données de recherche stockées
+     * @type {{principal: null, second: null}}
+     * @private
+     */
+    static _data = {
         principal: null,
         second: null,
     }
 
+    /**
+     * Fonction renvoyant les résultats de recherche d'un axe de recherche
+     * @param type {string} Chaine de caractère ciblant le quelle des axes de recherche
+     * @returns {Error|null} Le tableau de recettes
+     */
     static get(type) {
         switch (type) {
             case 'principal':
-                return this.data.principal;
+                return this._data.principal;
                 break;
             case 'second':
-                return this.data.second;
+                return this._data.second;
                 break;
             default:
                 return new Error('Nonce type called by ' + type);
         }
     }
 
-    static emit(type, result) {
+    /**
+     * Fonction qui permet de stocker le résultat d'un axe de recherche
+     * @param type {string} Chaine de caractère ciblant le quelle des axes de recherche
+     * @param result {[({})]} Tableau de recettes trouvées
+     */
+    static store(type, result) {
         switch (type) {
             case 'principal':
-                this.data.principal = result;
+                this._data.principal = result;
                 break;
             case 'second':
-                this.data.second = result;
+                this._data.second = result;
                 break;
             default:
-                return new Error('The type data is not good...');
+                return console.error('The type data is not good...');
         }
     }
 
+    /**
+     * Efface les données de recherche stockées
+     */
     static clearAll() {
-        this.data.principal = null;
-        this.data.second = null;
+        this._data.principal = null;
+        this._data.second = null;
     }
 }
 
 export class SearchEngine {
 
     static proceedPrincipalSearch(typedUserValue) {
-        // console.log("J'entre dans la fonction proceed Principal")
         const filteredRecipes = Data.getFilteredRecipes(typedUserValue);
 
         if (filteredRecipes != null) {
-            // console.log('La recherche donne d\'avoir des recettes filtrées alors on sauvegarde dans le resultat')
-            Results.emit('principal', filteredRecipes);
+            Results.store('principal', filteredRecipes);
             Interface.refreshInterface(filteredRecipes);
             this.proceedSecondSearch();
         } else {
@@ -71,26 +90,26 @@ export class SearchEngine {
             if ( haveSecondSearchResults !== null ) {
                 const gettingFilteringByExistResults = Data.getSpecialFilteredRecipes(haveSecondSearchResults);
                 Interface.refreshInterface(gettingFilteringByExistResults);
-                Results.emit('second', gettingFilteringByExistResults);
+                Results.store('second', gettingFilteringByExistResults);
                 return;
             }
 
             const currentRecipes = Results.get('second') || Data.getAllRecipes();
             const newFilteredRecipes = Data.getSpecialFilteredRecipes(currentRecipes);
             Interface.refreshInterface(newFilteredRecipes);
-            Results.emit('second', newFilteredRecipes);
+            Results.store('second', newFilteredRecipes);
             return;
         } else if ( haveTags ) {
             const currentRecipes = Results.get('second') || Data.getAllRecipes();
             const newFilteredRecipes = Data.getSpecialFilteredRecipes(currentRecipes);
             Interface.refreshInterface(newFilteredRecipes);
-            Results.emit('second', newFilteredRecipes);
+            Results.store('second', newFilteredRecipes);
             return;
         }
     }
 
     static refreshAfterRemoved() {
-        Results.emit('second', null);
+        Results.store('second', null);
         const currentRecipes = Results.get('principal');
 
         if ( (currentRecipes != null) && (Data.checkIfTagsExists() === false) ) {
