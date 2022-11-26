@@ -1,4 +1,32 @@
-import { DOM_ELEMENTS } from "../misc/constElements.js";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: managers/Data.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: managers/Data.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { DOM_ELEMENTS } from "../misc/constElements.js";
 import { DropdownList } from "../components/DropdownList.js";
 
 /**
@@ -6,11 +34,11 @@ import { DropdownList } from "../components/DropdownList.js";
  * @property {number} id Identifiant de la recette
  * @property {string} name Intitulé de la recette,
  * @property {number} servings Indéfini
- * @property {Array<Ingredient>} ingredients Tableau contenant des objets contenant des propriétés contenant les détails
+ * @property {Array&lt;Ingredient>} ingredients Tableau contenant des objets contenant des propriétés contenant les détails
  * @property {number} time Nombre de minutes de préparation de la recette
  * @property {string} description Texte contenant les instructions de préparation de la recette
  * @property {string} appliance Chaine de caractère de l'appareil utilisé pour la cuisson
- * @property {Array<string>} ustensils Tableau contenant les ustensiles utilisés pour la préparation de la recette
+ * @property {Array&lt;string>} ustensils Tableau contenant les ustensiles utilisés pour la préparation de la recette
  */
 
 /**
@@ -1753,14 +1781,14 @@ const RECIPES = [
  * @hideconstructor
  */
 export class Data {
-    /** @type {Array<Recipe>} */
+    /** @type {Array&lt;Recipe>} */
     static #allRecipes = RECIPES;
 
     /**
      * @property {Object} currentTags Liste des tags qui ont été ajoutées par l'interface de recherche
-     * @property {Array<string>} currentTags.ingredients Contient tous les tags (ingrédients) de recherche
-     * @property {Array<string>} currentTags.equipments Contient tous les tags (équipements) de recherche
-     * @property {Array<string>} currentTags.ustensils Contient tous les tags (ustensiles) de recherche
+     * @property {Array&lt;string>} currentTags.ingredients Contient tous les tags (ingrédients) de recherche
+     * @property {Array&lt;string>} currentTags.equipments Contient tous les tags (équipements) de recherche
+     * @property {Array&lt;string>} currentTags.ustensils Contient tous les tags (ustensiles) de recherche
      */
     static currentTags = {
         ingredients: [],
@@ -1782,7 +1810,7 @@ export class Data {
 
     /**
      * Permet de renvoyer la liste de toutes les recettes par défaut
-     * @returns {Array<Recipe>} Retourne les 50 recettes existantes
+     * @returns {Array&lt;Recipe>} Retourne les 50 recettes existantes
      */
     static getAllRecipes() {
         return Data.#allRecipes;
@@ -1790,7 +1818,7 @@ export class Data {
 
     /**
      * Renvoie un objet partiel contenant les propriétés seulement nécessaires à l'affichage
-     * @returns {{name: string, time: number, description: string, ingredients: Array<Ingredient>}} Objet avec les propriétés : name, time, description, ingredients
+     * @returns {{name: string, time: number, description: string, ingredients: Array&lt;Ingredient>}} Objet avec les propriétés : name, time, description, ingredients
      */
     static getPartialObjectForRecipes() {
         return Data.#allRecipes.map( recipe => {
@@ -1815,8 +1843,8 @@ export class Data {
 
     /**
      * Permet d'extraire des propriétés des objets contenus dans le tableau de recette afin de n'avoir que le texte pour construire les éléments de liste dans les Dropdowns Buttons
-     * @param {Array<Recipe>} recipesArray Tableau de recettes
-     * @returns {?Array<string>} Tableau de chaines de caractères
+     * @param {Array&lt;Recipe>} recipesArray Tableau de recettes
+     * @returns {?Array&lt;string>} Tableau de chaines de caractères
      */
     static getObjectInformationsForDataTags( recipesArray ) {
         if ( !recipesArray ) {
@@ -1849,7 +1877,7 @@ export class Data {
     /**
      * Filtre les recettes
      * @param {string} checkValue Valeur du texte saisie par l'utilisateur (toLowerCase) utilisée en amont
-     * @returns {Array<Recipe>} Renvoie un tableau de recettes filtrées par la valeur du champ saisie par l'utilisateur
+     * @returns {Array&lt;Recipe>} Renvoie un tableau de recettes filtrées par la valeur du champ saisie par l'utilisateur
      */
     static getFilteredRecipes(checkValue) {
         //TODO: pourquoi le filtre est donnée avec celle par défaut ?
@@ -1869,8 +1897,8 @@ export class Data {
 
     /**
      * Filtre les recettes selons les tags qui sont existants
-     * @param {Array<Recipe>} currentRecipes Tableau de recettes déja trouvées
-     * @returns {?Array<Recipe>} Renvoie un tableau de recettes filtrées par le biais des tags
+     * @param {Array&lt;Recipe>} currentRecipes Tableau de recettes déja trouvées
+     * @returns {?Array&lt;Recipe>} Renvoie un tableau de recettes filtrées par le biais des tags
      */
     static getSpecialFilteredRecipes(currentRecipes) {
         let addictiveFiltered = null;
@@ -1918,3 +1946,26 @@ export class Data {
         return (haveIngredients || haveEquipments || haveUstensils);
     }
 }
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Data.html">Data</a></li><li><a href="Interface.html">Interface</a></li><li><a href="Results.html">Results</a></li><li><a href="SearchEngine.html">SearchEngine</a></li></ul><h3><a href="global.html">Global</a></h3>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sat Nov 26 2022 06:24:44 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "les_petits_plats",
+  "version": "1.0.0",
+  "description": "Application web de recherche de recettes pour l'entreprise 'Les Petits Plats'",
+  "scripts": {
+    "start": "live-server",
+    "documentation": "live-server --port=9999 --open=./documentation/index.html",
+    "jsdoc": "jsdoc -c src/configs/jsdoc.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TechnoLogicsTheorical/Project_7-Petits_Plats.git"
+  },
+  "author": "Anthony.M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TechnoLogicsTheorical/Project_7-Petits_Plats/issues"
+  },
+  "homepage": "https://github.com/TechnoLogicsTheorical/Project_7-Petits_Plats#readme",
+  "devDependencies": {
+    "jsdoc": "^4.0.0"
+  }
+}
