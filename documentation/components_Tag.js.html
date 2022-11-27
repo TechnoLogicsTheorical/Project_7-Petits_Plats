@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Tag.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Tag.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { EVENTS } from "../misc/eventsCallback.js";
+import { DOM_ELEMENTS } from "../misc/constElements.js";
+import { Data } from "../managers/Data.js";
+
+/**
+ * Composant d'interfaçage permettant de créer un tag affichage avec un contrôle de suppression
+ */
+export class Tag {
+    /**
+     * @param {string} value Valeur du filtre cliqué par l'utilisateur
+     * @param {string} type Chaine de caractère qui est utilisé pour ajouter la classe CSS
+     */
+    constructor(value, type) {
+        this._container = DOM_ELEMENTS.Containers.actives_filters;
+        this._type = type;
+        this._textValue = value;
+        this.constructedElement = null;
+
+        this._alreadyExist = Data.currentTags[(this._type+'s')].includes(this._textValue.toLowerCase());
+    }
+
+    /**
+     * Fonction de création de l'élément HTML
+     */
+    create() {
+        if (this._alreadyExist) {
+            return;
+        }
+        const tagElementContainer = document.createElement('div');
+        tagElementContainer.className = 'filter-element ' + this._type;
+
+        const textContentValue = document.createElement('span');
+        textContentValue.className = 'title';
+        textContentValue.textContent = this._textValue;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.className = 'delete';
+        deleteButton.innerHTML = `&lt;img src="assets/img/icons/crossAround.svg" alt="Supprimer l'élément">`;
+        this._addDeleteButton(deleteButton);
+
+        tagElementContainer.appendChild(textContentValue);
+        tagElementContainer.appendChild(deleteButton);
+
+        this.constructedElement = tagElementContainer;
+
+        this._container.ariaHidden = 'false';
+        this._container.appendChild(this.constructedElement);
+    }
+
+    /**
+     * Fonction qui ajoute le comportement de suppression de l'élément HTML
+     * @param {HTMLButtonElement} buttonElement Element de bouton
+     * @private
+     */
+    _addDeleteButton(buttonElement) {
+        buttonElement.addEventListener('click', EVENTS.Tags.delete);
+    }
+
+    /**
+     * Ajoute au gestionnaire de donnée, une entrée texte pour définir qu'elle est existante
+     */
+    addDataTag() {
+        if (this._alreadyExist) {
+            return;
+        }
+        switch (this._type) {
+            case 'ingredient':
+                Data.currentTags.ingredients.push(this._textValue.toLowerCase());
+                break;
+            case 'equipment':
+                Data.currentTags.equipments.push(this._textValue.toLowerCase());
+                break;
+            case 'ustensil':
+                Data.currentTags.ustensils.push(this._textValue.toLowerCase());
+                break;
+            default:
+                return new Error('Cannot corresponding type to add a tag to list Array');
+        }
+    }
+
+    /**
+     * Supprime un filtre existant dans le gestionnaire de tag existant
+     * @param {string} type Catégorie du filtre stockée
+     * @param {string} textValue Valeur à supprimer
+     */
+    static removeDataTag(type, textValue) {
+        switch (type) {
+            case 'ingredient':
+                Data.currentTags.ingredients = Data.currentTags.ingredients.filter( arrayValue => {
+                    return arrayValue !== textValue;
+                });
+                break;
+            case 'equipment':
+                Data.currentTags.equipments = Data.currentTags.equipments.filter( arrayValue => {
+                    return arrayValue !== textValue;
+                });
+                break;
+            case 'ustensil':
+                Data.currentTags.equipments = Data.currentTags.ustensils.filter( arrayValue => {
+                    return arrayValue !== textValue;
+                });
+                break;
+            default:
+                console.error('Cannot corresponding type to remove a tag to list Array');
+        }
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Data.html">Data</a></li><li><a href="DropdownItemElement.html">DropdownItemElement</a></li><li><a href="DropdownList.html">DropdownList</a></li><li><a href="Interface.html">Interface</a></li><li><a href="RecipeCard.html">RecipeCard</a></li><li><a href="Results.html">Results</a></li><li><a href="SearchEngine.html">SearchEngine</a></li><li><a href="Tag.html">Tag</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DOM_ELEMENTS">DOM_ELEMENTS</a></li><li><a href="global.html#EVENTS">EVENTS</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.0</a> on Sun Nov 27 2022 02:38:56 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
