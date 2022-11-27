@@ -1,5 +1,5 @@
-import { DOM_ELEMENTS } from '../misc/constElements.js';
-import { DropdownList } from '../components/DropdownList.js';
+import {DOM_ELEMENTS} from '../misc/constElements.js';
+import {DropdownList} from '../components/DropdownList.js';
 
 /**
  * @typedef {Object} Recipe Objet descriptif d'une recette de cuisine
@@ -1814,6 +1814,37 @@ export class Data {
     }
 
     /**
+     * Supprime les tags déjà existants pour éviter de récréer l'élément dans la liste
+     * @param {Array<string>} objectArraysValues Entrées de chaines de caractères
+     * @param {string} type Catégorie du tableau
+     * @returns {?Array<string>} Retourne un tableau sans les entrées de tags déjà existantes
+     * @private
+     */
+    static _deleteCurrentsTags(objectArraysValues, type) {
+        let newFilteredValue = [...objectArraysValues];
+
+        if (Data.checkIfTagsExists()) {
+            if (type === 'ingredients') {
+                const currentTags = Data.currentTags[type];
+                newFilteredValue = objectArraysValues.filter( textVerification => {
+                    return !(currentTags.includes(textVerification.toLowerCase()));
+                });
+            } else if (type === 'equipments') {
+                const currentTags = Data.currentTags[type];
+                newFilteredValue = objectArraysValues.filter( textVerification => {
+                    return !(currentTags.includes(textVerification.toLowerCase()));
+                });
+            } else if ('ustensils') {
+                const currentTags = Data.currentTags[type];
+                newFilteredValue = objectArraysValues.filter( textVerification => {
+                    return !(currentTags.includes(textVerification.toLowerCase()));
+                });
+            }
+        }
+        return newFilteredValue;
+    }
+
+    /**
      * Permet d'extraire des propriétés des objets contenus dans le tableau de recette afin de n'avoir que le texte pour construire les éléments de liste dans les Dropdowns Buttons
      * @param {Array<Recipe>} recipesArray Tableau de recettes
      * @returns {?Array<string>} Tableau de chaines de caractères
@@ -1828,16 +1859,19 @@ export class Data {
             });
         });
         ingredients = this._deleteDuplicatedValue(ingredients);
+        ingredients = this._deleteCurrentsTags(ingredients, 'ingredients');
 
         let equipments = recipesArray.map( currentRecipe => {
             return currentRecipe.appliance;
         });
         equipments = this._deleteDuplicatedValue(equipments);
+        equipments = this._deleteCurrentsTags(equipments, 'equipments');
 
         let ustensils = recipesArray.flatMap( currentRecipe => {
             return currentRecipe.ustensils;
         });
         ustensils = this._deleteDuplicatedValue(ustensils);
+        ustensils = this._deleteCurrentsTags(ustensils, 'ustensils');
 
         return {
             ingredientsTextTags: ingredients,

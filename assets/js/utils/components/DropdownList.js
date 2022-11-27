@@ -1,4 +1,5 @@
-import { EVENTS } from "../misc/eventsCallback.js";
+import { EVENTS } from '../misc/eventsCallback.js';
+import { Data } from '../managers/Data.js';
 
 /**
  * Composant d'interfaçage permettant de créer un élément de la liste pour le contenant
@@ -47,11 +48,10 @@ export class DropdownList {
     constructor(DomElement, type) {
         try {
             if (!DomElement) {
-                return console.error(new Error('Dropdown List: Element is not good'));
+                return console.error('Dropdown List: Element is not good');
             }
             this._DomElement = DomElement;
             this._typeList = type;
-            this.arrayListElements = [];
             this._initEvent();
         }
         catch (e) {
