@@ -64,7 +64,7 @@ export class Results {
 
 /**
  * @class SearchEngine
- * @classdesc Librairie de fonction qui appelle les différents processus de recherche pour les différents axes
+ * @classdesc Librairie de fonctions qui appelle les différents processus de recherche pour les différents axes
  * @hideconstructor
  */
 export class SearchEngine {
@@ -79,8 +79,10 @@ export class SearchEngine {
         if (filteredRecipes != null) {
             Results.store('principal', filteredRecipes);
             Interface.refreshInterface(filteredRecipes);
-            // TODO: Probleme de logique soulevée par évaluateur
-            this.proceedSecondSearch();
+
+            if (Data.checkIfTagsExists()) {
+                this.proceedSecondSearch();
+            }
         } else {
             Interface.noRecipesCorresponding();
         }
@@ -90,32 +92,30 @@ export class SearchEngine {
      * Fonction de déclenchement de la recherche par filtre
      */
     static proceedSecondSearch() {
-        // On vérifie d'abord si un des tags sont existant dans les tableaux de stockages
+        // On vérifie d'abord si un des tags sont existants dans les tableaux de stockages
         const haveTags = Data.checkIfTagsExists();
         const haveMainSearchResults = Results.get('principal');
         const haveSecondSearchResults = Results.get('second');
 
+        // S'il n'y a pas de tags, on arrête dès maintenant pour eviter d'exécuter les autres cas
         if ( !haveTags ) {
-            // Si y a pas de tags on arrete des maintenant pour eviter d'executer les autres processus
             console.log('Aucun tag à rechercher !')
             return;
         }
 
-        if ( haveMainSearchResults ) {
-            if ( haveSecondSearchResults !== null ) {
-                const gettingFilteringByExistResults = Data.getSpecialFilteredRecipes(haveSecondSearchResults);
-                Interface.refreshInterface(gettingFilteringByExistResults);
-                Results.store('second', gettingFilteringByExistResults);
-                return;
-            }
-
-            const currentRecipes = Results.get('second') || Data.getAllRecipes();
-            const newFilteredRecipes = Data.getSpecialFilteredRecipes(currentRecipes);
-            Interface.refreshInterface(newFilteredRecipes);
-            Results.store('second', newFilteredRecipes);
+        // On vérifie en premier, si il existe des résultats dans le gestionnaire
+        if (haveSecondSearchResults !== null) {
+            const gettingFilteringByExistResults = Data.getSpecialFilteredRecipes(haveSecondSearchResults);
+            Interface.refreshInterface(gettingFilteringByExistResults);
+            Results.store('second', gettingFilteringByExistResults);
             return;
-        } else if ( haveTags ) {
-            const currentRecipes = Results.get('second') || Data.getAllRecipes();
+        } else if (haveMainSearchResults !== null) {
+            const gettingFilteringByExistResults = Data.getSpecialFilteredRecipes(haveMainSearchResults);
+            Interface.refreshInterface(gettingFilteringByExistResults);
+            Results.store('second', gettingFilteringByExistResults);
+            return;
+        } else {
+            const currentRecipes = Data.getAllRecipes();
             const newFilteredRecipes = Data.getSpecialFilteredRecipes(currentRecipes);
             Interface.refreshInterface(newFilteredRecipes);
             Results.store('second', newFilteredRecipes);
@@ -127,18 +127,26 @@ export class SearchEngine {
      * Fonction permettant qu'après la détection de l'événement de suppression d'un élément de filtre additionnel est supprimée, la recherche se relance !
      */
     static refreshAfterRemoved() {
+        // On efface les résultats de la recherche actuelle pour pouvoir la refaire
         Results.store('second', null);
-        const currentRecipes = Results.get('principal');
 
-        if ( (currentRecipes != null) && (Data.checkIfTagsExists() === false) ) {
-            Interface.refreshInterface(currentRecipes);
+        const haveRecipes = Results.get('principal');
+        const haveTags = Data.checkIfTagsExists();
+
+        // Si il y a des résultats déjà existants dans la recherche principale, mais qu'il n'y aucuns filtres additionnels à rechercher alors pas besoins de faire plus !
+        if ( (haveRecipes !== null)
+            && (haveTags === false) )
+        {
+            Interface.refreshInterface(haveRecipes);
             return;
         }
 
-        if (Data.checkIfTagsExists()) {
+        // Si il y a des tags alors, on va relancer la recherche
+        if (haveTags) {
             this.proceedSecondSearch();
             return;
         }
+
         Interface.defaultDisplay();
     }
 }

@@ -1820,7 +1820,7 @@ export class Data {
      */
     static getObjectInformationsForDataTags( recipesArray ) {
         if ( !recipesArray ) {
-            return console.error(new Error('Gettings failed: For Dropdown Lists'));
+            return console.error('Gettings failed: For Dropdown Lists');
         }
         let ingredients = recipesArray.flatMap( currentRecipe => {
             return currentRecipe.ingredients.map( currentIngredient => {
@@ -1847,12 +1847,12 @@ export class Data {
     }
 
     /**
-     * Filtre les recettes
+     * Filtre les recettes pour obtenir un résultat affichable dans l'interface
      * @param {string} checkValue Valeur du texte saisie par l'utilisateur (toLowerCase) utilisée en amont
-     * @returns {Array<Recipe>} Renvoie un tableau de recettes filtrées par la valeur du champ saisie par l'utilisateur
+     * @returns {?Array<Recipe>} Renvoie un tableau de recettes filtrées par la valeur du champ saisie par l'utilisateur
      */
     static getFilteredRecipes(checkValue) {
-        //TODO: pourquoi le filtre est donnée avec celle par défaut ?
+        // On se base sur les recettes déjà existantes (sinon API Backend)
         const defaultRecipes = Data.getAllRecipes();
         const filteredRecipes = defaultRecipes.filter(currentRecipe => {
             return (
@@ -1863,13 +1863,14 @@ export class Data {
                 })
             );
         });
+        // Utilisé pour éviter de renvoyer un tableau vide []
         if (filteredRecipes.length === 0) return null;
         else return filteredRecipes;
     }
 
     /**
-     * Filtre les recettes selons les tags qui sont existants
-     * @param {Array<Recipe>} currentRecipes Tableau de recettes déja trouvées
+     * Filtre les recettes selon les tags qui sont existants
+     * @param {Array<Recipe>} currentRecipes Tableau de recettes deja trouvées
      * @returns {?Array<Recipe>} Renvoie un tableau de recettes filtrées par le biais des tags
      */
     static getSpecialFilteredRecipes(currentRecipes) {

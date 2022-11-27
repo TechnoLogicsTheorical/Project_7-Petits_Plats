@@ -8,7 +8,7 @@ export class RecipeCard {
      */
     constructor(infosObject) {
         if (!infosObject) {
-            console.error(new Error('Recipe Card: infosObject is corompted'));
+            console.error('Recipe Card: infosObject is corompted');
             return
         }
         this._name = infosObject.name;

@@ -68,7 +68,6 @@ export const EVENTS = {
             const textValue = element.textContent.toLowerCase();
 
             DOM_ELEMENTS.Containers.actives_filters.removeChild(element);
-            // TODO: Coder la suppression dans le tableau Data.currentTags puis réflecter la recherche selon les tags ...
             Tag.removeDataTag(typeElement, textValue);
             SearchEngine.refreshAfterRemoved();
         },
