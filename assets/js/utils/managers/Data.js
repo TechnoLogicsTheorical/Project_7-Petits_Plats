@@ -1,5 +1,5 @@
-import { DOM_ELEMENTS } from "../misc/constElements.js";
-import { DropdownList } from "../components/DropdownList.js";
+import { DOM_ELEMENTS } from '../misc/constElements.js';
+import { DropdownList } from '../components/DropdownList.js';
 
 /**
  * @typedef {Object} Recipe Objet descriptif d'une recette de cuisine
@@ -19,7 +19,7 @@ import { DropdownList } from "../components/DropdownList.js";
  * @property {number} quantity Quantité de l'unité de poids
  * @property {string} unit Texte descriptif de l'unité de poids
  */
-
+/* eslint-disable no-alert, no-console */
 const RECIPES = [
     {
         "id": 1,
@@ -1766,7 +1766,7 @@ export class Data {
         ingredients: [],
         equipments: [],
         ustensils: [],
-    }
+    };
 
     /**
      * @property {Object} dropdownLists Stocke les éléments DOM des boutons (Dropdown) de l'interface
@@ -1778,7 +1778,7 @@ export class Data {
         ingredients: new DropdownList(DOM_ELEMENTS.DropdownLists.ingredient, 'ingredient'),
         equipments: new DropdownList(DOM_ELEMENTS.DropdownLists.equipment, 'equipment'),
         ustensils: new DropdownList(DOM_ELEMENTS.DropdownLists.ustensil, 'ustensil'),
-    }
+    };
 
     /**
      * Permet de renvoyer la liste de toutes les recettes par défaut
@@ -1799,9 +1799,9 @@ export class Data {
                 time: recipe.time,
                 description: recipe.description,
                 ingredients: recipe.ingredients
-            }
+            };
         });
-    };
+    }
 
     /**
      * Supprimer les entrées qui peuvent être en doublons dans une liste
@@ -1824,18 +1824,18 @@ export class Data {
         }
         let ingredients = recipesArray.flatMap( currentRecipe => {
             return currentRecipe.ingredients.map( currentIngredient => {
-                return currentIngredient.ingredient
+                return currentIngredient.ingredient;
             });
         });
         ingredients = this._deleteDuplicatedValue(ingredients);
 
         let equipments = recipesArray.map( currentRecipe => {
-            return currentRecipe.appliance
+            return currentRecipe.appliance;
         });
         equipments = this._deleteDuplicatedValue(equipments);
 
         let ustensils = recipesArray.flatMap( currentRecipe => {
-            return currentRecipe.ustensils
+            return currentRecipe.ustensils;
         });
         ustensils = this._deleteDuplicatedValue(ustensils);
 
@@ -1843,7 +1843,7 @@ export class Data {
             ingredientsTextTags: ingredients,
             equipmentsTextTags: equipments,
             ustensilsTextTags: ustensils,
-        }
+        };
     }
 
     /**
@@ -1859,7 +1859,7 @@ export class Data {
                 currentRecipe.name.toLowerCase().includes(checkValue)
                 || currentRecipe.description.toLowerCase().includes(checkValue)
                 || currentRecipe.ingredients.some((ingredient) => {
-                    ingredient.ingredient.toLowerCase().includes(checkValue)
+                    ingredient.ingredient.toLowerCase().includes(checkValue);
                 })
             );
         });

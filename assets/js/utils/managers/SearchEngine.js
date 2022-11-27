@@ -1,5 +1,5 @@
-import { Data } from "../managers/Data.js";
-import { Interface } from "../Interface.js";
+import { Data } from '../managers/Data.js';
+import { Interface } from '../Interface.js';
 
 /**
  * @class Results
@@ -15,7 +15,7 @@ export class Results {
     static _data = {
         principal: null,
         second: null,
-    }
+    };
 
     /**
      * Fonction renvoyant les résultats de recherche d'un axe de recherche
@@ -99,7 +99,7 @@ export class SearchEngine {
 
         // S'il n'y a pas de tags, on arrête dès maintenant pour eviter d'exécuter les autres cas
         if ( !haveTags ) {
-            console.log('Aucun tag à rechercher !')
+            console.log('Aucun tag à rechercher !');
             return;
         }
 

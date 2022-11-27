@@ -1,7 +1,7 @@
-import { DOM_ELEMENTS } from "../misc/constElements.js";
-import { Tag } from "../components/Tag.js";
-import { Results, SearchEngine } from "../managers/SearchEngine.js";
-import { Interface } from "../Interface.js";
+import { DOM_ELEMENTS } from '../misc/constElements.js';
+import { Tag } from '../components/Tag.js';
+import { Results, SearchEngine } from '../managers/SearchEngine.js';
+import { Interface } from '../Interface.js';
 
 /**
  * Regroupe tous les événements de l'interface et des comportements nécessaires au bon déroulement des actions
@@ -96,4 +96,4 @@ export const EVENTS = {
             Results.clearAll();
         }
     }
-}
+};

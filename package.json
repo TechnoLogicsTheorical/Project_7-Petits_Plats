@@ -5,7 +5,8 @@
   "scripts": {
     "start": "live-server",
     "documentation": "live-server --port=9999 --open=./documentation/index.html",
-    "jsdoc": "jsdoc -c src/configs/jsdoc.json"
+    "jsdoc": "jsdoc -c src/configs/jsdoc.json",
+    "eslint": "eslint -c src/configs/.eslintrc.json ./assets/js/**"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/TechnoLogicsTheorical/Project_7-Petits_Plats#readme",
   "devDependencies": {
+    "eslint": "^8.28.0",
     "jsdoc": "^4.0.0"
   }
 }

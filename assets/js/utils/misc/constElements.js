@@ -49,4 +49,4 @@ export const DOM_ELEMENTS = {
     Buttons: {
         all_dropdowns: document.querySelectorAll('.arrow-icon'),
     }
-}
+};
