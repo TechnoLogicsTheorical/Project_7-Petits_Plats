@@ -2,7 +2,14 @@ import { EVENTS } from "../misc/eventsCallback.js";
 import { DOM_ELEMENTS } from "../misc/constElements.js";
 import { Data } from "../managers/Data.js";
 
+/**
+ * Composant d'interfaçage permettant de créer un tag affichage avec un contrôle de suppression
+ */
 export class Tag {
+    /**
+     * @param {string} value Valeur du filtre cliqué par l'utilisateur
+     * @param {string} type Chaine de caractère qui est utilisé pour ajouter la classe CSS
+     */
     constructor(value, type) {
         this._container = DOM_ELEMENTS.Containers.actives_filters;
         this._type = type;
@@ -12,6 +19,9 @@ export class Tag {
         this._alreadyExist = Data.currentTags[(this._type+'s')].includes(this._textValue.toLowerCase());
     }
 
+    /**
+     * Fonction de création de l'élément HTML
+     */
     create() {
         if (this._alreadyExist) {
             return;
@@ -37,12 +47,19 @@ export class Tag {
         this._container.appendChild(this.constructedElement);
     }
 
+    /**
+     * Fonction qui ajoute le comportement de suppression de l'élément HTML
+     * @param {HTMLButtonElement} buttonElement Element de bouton
+     * @private
+     */
     _addDeleteButton(buttonElement) {
         buttonElement.addEventListener('click', EVENTS.Tags.delete);
     }
-    
-    addDataTag() {
 
+    /**
+     * Ajoute au gestionnaire de donnée, une entrée texte pour définir qu'elle est existante
+     */
+    addDataTag() {
         if (this._alreadyExist) {
             return;
         }
@@ -61,6 +78,11 @@ export class Tag {
         }
     }
 
+    /**
+     * Supprime un filtre existant dans le gestionnaire de tag existant
+     * @param {string} type Catégorie du filtre stockée
+     * @param {string} textValue Valeur à supprimer
+     */
     static removeDataTag(type, textValue) {
         switch (type) {
             case 'ingredient':
@@ -79,7 +101,7 @@ export class Tag {
                 });
                 break;
             default:
-                return new Error('Cannot corresponding type to remove a tag to list Array');
+                console.error('Cannot corresponding type to remove a tag to list Array');
         }
     }
 }

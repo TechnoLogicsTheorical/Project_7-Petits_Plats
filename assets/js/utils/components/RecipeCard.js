@@ -1,21 +1,28 @@
+/**
+ * Composant d'interfaçage permettant de générer une carte de recette.
+ */
 export class RecipeCard {
+    /**
+     * Objet avec les propriétés name, time, description, ingredients
+     * @param {Object<name:string, time:number, description:string, ingredients:Array<Ingredient> >} infosObject
+     */
     constructor(infosObject) {
-        try {
-            if (!infosObject) {
-                console.error(new Error('Recipe Card: infosObject is corompted'));
-                return
-            }
-            this._name = infosObject.name;
-            this._time = infosObject.time;
-            this._description = infosObject.description;
-
-            this._ingredients = infosObject.ingredients;
+        if (!infosObject) {
+            console.error(new Error('Recipe Card: infosObject is corompted'));
+            return
         }
-        catch (exception) {
+        this._name = infosObject.name;
+        this._time = infosObject.time;
+        this._description = infosObject.description;
 
-        }
+        this._ingredients = infosObject.ingredients;
     }
 
+    /**
+     * Fonction interne utilisée pour la chaine de caractère générée selon les propriétés présentes
+     * @returns {string} Chaine de caractère
+     * @private
+     */
     _createIngredientsList() {
         let finalStringElements = '';
 
@@ -54,6 +61,10 @@ export class RecipeCard {
         return finalStringElements;
     }
 
+    /**
+     * Créer une carte HTML pour l'affichage avec les données de recettes
+     * @returns {HTMLElement}
+     */
     create() {
         const cardContainer = document.createElement('article');
         cardContainer.className = 'recipe-card';
