@@ -1,5 +1,4 @@
 import { EVENTS } from '../misc/eventsCallback.js';
-import { Data } from '../managers/Data.js';
 
 /**
  * Composant d'interfaçage permettant de créer un élément de la liste pour le contenant
@@ -46,17 +45,12 @@ export class DropdownList {
      * @param {string} type Catégorie du conteneur : ingredient, equipment, ustensil
      */
     constructor(DomElement, type) {
-        try {
-            if (!DomElement) {
-                return console.error('Dropdown List: Element is not good');
-            }
-            this._DomElement = DomElement;
-            this._typeList = type;
-            this._initEvent();
+        if (!DomElement) {
+            return console.error('Dropdown List: Element is not good');
         }
-        catch (e) {
-            console.error(e);
-        }
+        this._DomElement = DomElement;
+        this._typeList = type;
+        this._initEvent();
     }
 
     /**
@@ -83,6 +77,11 @@ export class DropdownList {
     _addButtonEvent() {
         const iconSpanButton = this._DomElement.previousElementSibling.firstElementChild;
         iconSpanButton.addEventListener('click', EVENTS.DropdownLists.toggleListMenu)
+
+        const inputElement = this._DomElement.parentElement.firstElementChild.lastElementChild;
+        inputElement.addEventListener('keydown', (e) => {
+            EVENTS.Inputs.attachDropdownEventSearch(e, this._typeList);
+        })
     }
 
     /**

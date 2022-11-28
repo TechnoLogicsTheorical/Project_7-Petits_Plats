@@ -66,12 +66,16 @@ export class Tag {
         switch (this._type) {
             case 'ingredient':
                 Data.currentTags.ingredients.push(this._textValue.toLowerCase());
+                Data.dropdownLists.ingredients._DomElement.parentElement.querySelector('input').value = '';
                 break;
             case 'equipment':
                 Data.currentTags.equipments.push(this._textValue.toLowerCase());
+                Data.dropdownLists.equipments._DomElement.parentElement.querySelector('input').value = '';
                 break;
             case 'ustensil':
                 Data.currentTags.ustensils.push(this._textValue.toLowerCase());
+                Data.dropdownLists.ustensils._DomElement.parentElement.querySelector('input').value = '';
+
                 break;
             default:
                 return new Error('Cannot corresponding type to add a tag to list Array');

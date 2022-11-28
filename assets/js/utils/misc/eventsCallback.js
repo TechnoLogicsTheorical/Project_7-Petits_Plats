@@ -2,6 +2,7 @@ import { DOM_ELEMENTS } from '../misc/constElements.js';
 import { Tag } from '../components/Tag.js';
 import { Results, SearchEngine } from '../managers/SearchEngine.js';
 import { Interface } from '../Interface.js';
+import { Data } from '../managers/Data.js';
 
 /**
  * Regroupe tous les événements de l'interface et des comportements nécessaires au bon déroulement des actions
@@ -94,6 +95,37 @@ export const EVENTS = {
             }
             Interface.defaultDisplay();
             Results.clearAll();
+        },
+
+        attachDropdownEventSearch(event, type) {
+            const textValue = event.target.value;
+            // Force to Open Menu
+            const currentListMenu = event.target.parentElement.nextElementSibling;
+            const currentIconButton = event.target;
+            currentListMenu.ariaHidden = 'false';
+            currentIconButton.classList.add('rotate');
+
+            const htmlCollectionToArray = [...currentListMenu.children];
+
+            //Si on efface pas la valeur
+            if (event.key !== 'Backspace') {
+
+                htmlCollectionToArray.forEach( listElement => {
+                    const textElement = listElement.textContent.toLowerCase();
+                    if (!textElement.includes(textValue.toLowerCase())) {
+                        listElement.style.display = 'none';
+                    }
+                })
+            } else {
+                // Sinon on reset
+                event.target.value = '';
+                htmlCollectionToArray.forEach( listElement => {
+                    const textElement = listElement.textContent.toLowerCase();
+                    if (!textElement.includes(textValue.toLowerCase())) {
+                        listElement.style.display = '';
+                    }
+                });
+            }
         }
     }
 };
